@@ -1,77 +1,77 @@
 import json
-import os
-# data = []  # list of dictionaries to store cleaned data
+import glob
 
 
 # function to extract the contents of each json file
 # and store them in a list format to pre-process it later.
-def getrawdata(path):
-    raw_data = []  # to store the contents from raw files
-    for dirname, dirnames, filenames in os.walk(path):
-        for filename in filenames:
-            file = dirname + '/' + filename
-
-            with open(file) as json_file:
-                raw_data.append(json.load(json_file))
-    return raw_data
-
-
-# print(raw_data[5])
-# print(len(raw_data))  # 19458 files
-
-
-def cleancontent(raw_data):
-    single_paper = {}
-    for each_paper in raw_data:
-        # if each_paper['paper_id'] == 'PMC3091733':
-        single_paper['paper_id'] = each_paper['paper_id']
-        single_paper['title'] = each_paper['metadata']['title']
-
-        # get abstracts from papers
-        # to combine multiple abstract paragraphs into a single paragraph
-        merge_abstract = ""
-        # assigns a default value to the papers that don't have any abstract
-        if 'abstract' in each_paper:
-            for each_abstract in each_paper['abstract']:
-                merge_abstract = ''.join(each_abstract['text'])
-                # change this logic
-
-        single_paper['abstract'] = merge_abstract
-
-        # get body text from papers
-        # to combine multiple body text paragraphs into a single text
-        merge_bodytext = []
-        sections = {}  # change the logic
-        for each_bodytext in each_paper['body_text']:
-            if each_bodytext['section'] in sections:
-                merge_bodytext.append(each_bodytext['text'])
-            else:
-                section_text = 'SECTION:' + each_bodytext['section']
-                body_text = each_bodytext['text']
-                whole_text = ' '.join([section_text, body_text])
-                merge_bodytext.append(whole_text)
-                sections.append(each_bodytext['section'])
-
-        merge_bodytext = ''.join(merge_bodytext)
-        single_paper['body_text'] = merge_bodytext
-
-        data.append(single_paper)
-
+def get_paper(paths):
+    data = []
+    for path in paths:
+        with open(path) as json_file:
+            data.append(json.load(json_file))
     return data
+
+
+def merge_abstracts(paper):
+    merge_abstract = ''
+    # assigns a default value to the papers that don't have any abstract
+    if 'abstract' in paper:
+        for abstract in paper['abstract']:
+            # change logic
+            merge_abstract = ' '.join([merge_abstract, abstract['text']])
+    return merge_abstract
+
+
+# get body text from papers
+# to combine multiple body text paragraphs into a single text
+def merge_sections(paper):
+    sections = {}  # change the logic
+    for bodytext in paper['body_text']:
+        section = bodytext['section']
+        text = bodytext['text']
+        if section in sections:
+            sections[section].append(text)
+        else:
+            sections[section] = [text]
+    for keys, value in sections.items():
+        sections[keys] = ' '.join(value)
+    # print(sections)
+    return sections
+
+
+def merge_bodytexts(paper):
+    merge_text = ''
+    for text in paper['body_text']:
+        merge_text = ' '.join([merge_text, text['text']])
+    return merge_text
+
+
+def process_paper(paper):
+    single_paper = {}
+    single_paper['paper_id'] = paper['paper_id']
+    single_paper['title'] = paper['metadata']['title']
+    single_paper['abstract'] = merge_abstracts(paper)
+    single_paper['section_bodytext'] = merge_sections(paper)
+    single_paper['bodytext'] = merge_bodytexts(paper)
+    return single_paper
 
 
 # print(len(data)) # 19458
 
 
 def exportdata(data, path):
-    with open(data_loc+'covid_papers.json', 'w') as data_file:
+    with open(path+'covid_papers.json', 'w') as data_file:
         json.dump(data, data_file)
-        print("File written")
+        print(len(data))
 
 
 if __name__ == '__main__':
-    data_loc = "/home/prajakta/Documents/SharpestMinds/COVID-analysis/papers/"
-    raw_data = getrawdata(data_loc)
-    data = cleancontent(raw_data)
-    data_loc = "/home/prajakta/Documents/SharpestMinds/COVID-analysis/data/"
-    exportdata(data, data_loc)
+    directory = "/home/prajakta/Documents/SharpestMinds/COVID-analysis"
+    data_loc = '/'.join([directory, "papers/*/*.json"])
+    files = glob.glob(data_loc)
+    raw_data = get_paper(files)
+    data = []
+    for paper in raw_data:
+        data.append(process_paper(paper))
+    final_data_loc = '/'.join([directory, "data/"])
+    exportdata(data, final_data_loc)
