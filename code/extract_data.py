@@ -58,7 +58,7 @@ def process_paper(paper):
 
 # print(len(data)) # 19458
 
-
+# don't export all files into one large file. break it up. 
 def exportdata(data, path):
     with open(path+'covid_papers.json', 'w') as data_file:
         json.dump(data, data_file)
