@@ -58,20 +58,21 @@ def process_paper(paper):
 
 # print(len(data)) # 19458
 
-# don't export all files into one large file. break it up. 
+# don't export all files into one large file. break it up.
 def exportdata(data, path):
-    with open(path+'covid_papers.json', 'w') as data_file:
+    with open(path+data['paper_id']+'.json', 'w') as data_file:
         json.dump(data, data_file)
-        print(len(data))
+        #print(len(data))
 
 
 if __name__ == '__main__':
     directory = "/home/prajakta/Documents/SharpestMinds/COVID-analysis"
     data_loc = '/'.join([directory, "papers/*/*.json"])
+    final_data_loc = '/'.join([directory, "data/"])
+
     files = glob.glob(data_loc)
     raw_data = get_paper(files)
-    data = []
+    # data = []
     for paper in raw_data:
-        data.append(process_paper(paper))
-    final_data_loc = '/'.join([directory, "data/"])
-    exportdata(data, final_data_loc)
+        # data.append(process_paper(paper))
+        exportdata(process_paper(paper), final_data_loc)
