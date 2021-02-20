@@ -2,9 +2,16 @@ import json
 import glob
 
 
-# function to extract the contents of each json file
-# and store them in a list format to pre-process it later.
 def get_paper(paths):
+    """
+    Extract the contents from json files.
+        
+        Parameters:
+                paths (list): Paths for all json files
+                
+        Returns:
+                data (list): Contents from all json files
+    """
     data = []
     for path in paths:
         with open(path) as json_file:
@@ -13,19 +20,34 @@ def get_paper(paths):
 
 
 def merge_abstracts(paper):
+    """
+    Concatenate multiple paragraphs of an abstract into a single text seperated by space.
+        
+        Parameters:
+                paper (dictionary): Contents of a json file
+        Returns:
+                merge_abstract (string): Single abstract
+    """
     merge_abstract = ''
-    # assigns a default value to the papers that don't have any abstract
+
     if 'abstract' in paper:
         for abstract in paper['abstract']:
-            # change logic
             merge_abstract = ' '.join([merge_abstract, abstract['text']])
     return merge_abstract
 
 
-# get body text from papers
-# to combine multiple body text paragraphs into a single text
+
 def merge_sections(paper):
-    sections = {}  # change the logic
+    """
+    Extract multiple sections within a body text and store it in a dictionary. Merge sections with
+    multiple paragraphs.
+        
+        Parameters:
+                paper (dictionary): Contents of a json file
+        Returns:
+                sections (dictionary): Single bodytext 
+    """
+    sections = {}
     for bodytext in paper['body_text']:
         section = bodytext['section']
         text = bodytext['text']
@@ -35,11 +57,18 @@ def merge_sections(paper):
             sections[section] = [text]
     for keys, value in sections.items():
         sections[keys] = ' '.join(value)
-    # print(sections)
     return sections
 
 
 def merge_bodytexts(paper):
+    """
+    Concatenate multiple paragraphs of body text into a single text seperated by space.
+        
+        Parameters:
+                paper (dictionary): Contents of a json file
+        Returns:
+                merge_text (string): Single bodytext 
+    """
     merge_text = ''
     for text in paper['body_text']:
         merge_text = ' '.join([merge_text, text['text']])
@@ -47,6 +76,14 @@ def merge_bodytexts(paper):
 
 
 def process_paper(paper):
+    """
+    Load contents from a json file into a dictionary 
+        
+        Parameters:
+                paper (dictionary): Contents of a json file
+        Returns:
+                single_paper (dictionary): contents of a paper 
+    """
     single_paper = {}
     single_paper['paper_id'] = paper['paper_id']
     single_paper['title'] = paper['metadata']['title']
@@ -56,13 +93,19 @@ def process_paper(paper):
     return single_paper
 
 
-# print(len(data)) # 19458
 
-# don't export all files into one large file. break it up.
 def exportdata(data, path):
+    """
+    Store the pre-processed data as json file
+        
+        Parameters:
+                data (list): Contents of json files
+                path (list): Paths of json files
+        Returns:
+                single_paper (dictionary): contents of a paper 
+    """
     with open(path+data['paper_id']+'.json', 'w') as data_file:
         json.dump(data, data_file)
-        #print(len(data))
 
 
 if __name__ == '__main__':
@@ -72,7 +115,6 @@ if __name__ == '__main__':
 
     files = glob.glob(data_loc)
     raw_data = get_paper(files)
-    # data = []
+
     for paper in raw_data:
-        # data.append(process_paper(paper))
         exportdata(process_paper(paper), final_data_loc)
