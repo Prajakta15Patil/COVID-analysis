@@ -18,10 +18,10 @@ Identify the optimal number of clusters for this dataset using k-means clusterin
 Build abstractive summaries on papers using [BertAbs](https://github.com/nlpyang/PreSumm) and BERT-Base uncased model.
 
 ### Code
-extract_data - Preprocess raw papers and store it in json format for ease of accessibility.
-covid_analysis - exploratory analysis on extractive summarization and abstracts of papers.
-covid_clustering - Analyze papers using K-means clustering nd topic modelling.
-covid_bert - Generate abstractive summarization on papers using BERTAbs and BERT-Base uncased model.
+1. extract_data - Preprocess raw papers and store it in json format for ease of accessibility.
+2. covid_analysis - exploratory analysis on extractive summarization and abstracts of papers.
+3. covid_clustering - Analyze papers using K-means clustering nd topic modelling.
+4. covid_bert - Generate abstractive summarization on papers using BERTAbs and BERT-Base uncased model.
 
 
 
