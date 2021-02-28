@@ -1,5 +1,8 @@
 # COVID-analysis
-NLP based summarization and clustering of COVID-related research.
+NLP based text summarization and clustering of COVID-related research.
+
+### Motivation
+The world is grappling with one of the deadliest pandemics in history. Each day I receive news about a new COVID-19 research and its findings. I was interested in keeping myself informed with the latest research on coronaviruses and I decided to analyze research papers to understand the different topics being discussed. I was also interested in summarizing these papers to quickly understand the content of the papers without having to read it fully. 
 
 ### Dataset
 [CORD-19: The Covid-19 Open Research Dataset](https://allenai.org/data/cord-19)
@@ -13,6 +16,13 @@ Identify the optimal number of clusters for this dataset using k-means clusterin
 
 #### Abstractive summarization
 Build abstractive summaries on papers using [BertAbs](https://github.com/nlpyang/PreSumm) and BERT-Base uncased model.
+
+### Code
+extract_data - Preprocess raw papers and store it in json format for ease of accessibility.
+covid_analysis - exploratory analysis on extractive summarization and abstracts of papers.
+covid_clustering - Analyze papers using K-means clustering nd topic modelling.
+covid_bert - Generate abstractive summarization on papers using BERTAbs and BERT-Base uncased model.
+
 
 
 
