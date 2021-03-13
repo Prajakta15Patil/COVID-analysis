@@ -11,8 +11,8 @@ The data was pulled in August 2020 and has ~19,000 research papers.
 
 ### Analysis
 
-#### Clustering and Topic Modelling
-Identify the optimal number of clusters for this dataset using k-means clustering. Then perform topic modelling for the number of clusters from clustering analysis. 
+#### Clustering and Topic Modeling
+Identify the optimal number of clusters for this dataset using k-means clustering. Then perform topic modeling for the number of clusters from clustering analysis. 
 
 #### Abstractive summarization
 Build abstractive summaries on papers using [BertAbs](https://github.com/nlpyang/PreSumm) and BERT-Base uncased model.
@@ -20,7 +20,7 @@ Build abstractive summaries on papers using [BertAbs](https://github.com/nlpyang
 ### Code
 1. extract_data - Preprocess raw papers and store it in json format for ease of accessibility.
 2. covid_analysis - exploratory analysis on extractive summarization and abstracts of papers.
-3. covid_clustering - Analyze papers using K-means clustering nd topic modelling.
+3. covid_clustering - Analyze papers using K-means clustering nd topic modeling.
 4. covid_bert - Generate abstractive summarization on papers using BERTAbs and BERT-Base uncased model.
 
 
